@@ -2,48 +2,49 @@ import React, { useState, useEffect } from "react";
 import Chart from "react-apexcharts";
 
 function App() {
-  const [petPrices, setPetPrice] = useState([]);
-  const [petChart, setPetChart] = useState({
+  const [heartRate, setHeartRate] = useState([]);
+  const [rateChart, setRateChart] = useState({
     options: {
       chart: {
         id: "basic-bar",
       },
       xaxis: {
-        categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999],
+        categories: [],
       },
     },
     series: [
       {
         name: "series-1",
-        data: [30, 40, 45, 50, 49, 60, 70, 91],
+        data: [],
       },
     ],
   });
 
   useEffect(() => {
-    fetch("https://tame-calf-cowboy-boots.cyclic.app/pets_price")
+    fetch("https://red-violet-ladybug-wrap.cyclic.app/getrate")
       .then((res) => res.json())
       .then((result) => {
         console.log(result);
-        setPetPrice(result);
+        setHeartRate(result);
       });
-    fetch("https://tame-calf-cowboy-boots.cyclic.app/pets_price_chart")
+
+    fetch("https://red-violet-ladybug-wrap.cyclic.app/getrate_chart")
       .then((res) => res.json())
       .then((result) => {
         console.log(result);
-        setPetChart({
+        setRateChart({
           options: {
             chart: {
               id: "basic-bar",
             },
             xaxis: {
-              categories: result.petNames,
+              categories: result.time,
             },
           },
           series: [
             {
               name: "ราคา",
-              data: result.prices,
+              data: result.heartRate,
             },
           ],
         });
@@ -52,17 +53,17 @@ function App() {
 
   return (
     <div>
-      <h1>กฤตพัฒน์ เกียรติเลขา 6403811</h1>
+      <h1>Heartrate Plotter</h1>
       <ul>
-        {petPrices.map((pet) => (
-          <li key={pet.id}>
-            {pet.petName} {pet.price}
+        {petPrices.map((rate) => (
+          <li key={rate.id}>
+            {rate.time} {rate.heartrate}
           </li>
         ))}
       </ul>
       <Chart
-        options={petChart.options}
-        series={petChart.series}
+        options={rateChart.options}
+        series={rateChart.series}
         type="bar"
         width="500"
       />
